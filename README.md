@@ -6,3 +6,7 @@ Demonstrates how to use the flutter_inappwebview plugin.
 
 For help getting started with Flutter, view our online
 [documentation](https://flutter.io/).
+
+
+## build
+flutter build apk
