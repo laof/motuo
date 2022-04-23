@@ -1,4 +1,4 @@
-# flutter_inappwebview_example
+# my_browser
 
 Demonstrates how to use the flutter_inappwebview plugin.
 
