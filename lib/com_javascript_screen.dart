@@ -3,12 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:motuo/env.data.dart';
 import 'package:motuo/my_dialog.dart';
-import 'package:motuo/js.cache.dart';
-import 'package:motuo/setting.data.dart';
-import 'package:motuo/url.dart';
+import 'package:motuo/cache_js.dart';
+import 'package:motuo/sys.data.dart';
+import 'package:motuo/conf.dart';
 import 'main.dart';
-
-var firstview = 'Loading, please wait...\n\n';
 
 class ConmonJavascriptScreen extends StatefulWidget {
   SettingMap obj;
@@ -20,13 +18,13 @@ class ConmonJavascriptScreen extends StatefulWidget {
 class _ComState extends State<ConmonJavascriptScreen> {
   HeadlessInAppWebView? headlessWebView;
   String result = "";
-  String log = firstview ;
+  String log = "";
   SettingMap obj;
 
   _ComState(this.obj);
 
   inject() async {
-    var runfunc = "run()";
+    var runFunc = "run()";
 
     List<dynamic> plist = obj.parameter;
 
@@ -44,7 +42,7 @@ class _ComState extends State<ConmonJavascriptScreen> {
           parameter.add(Null);
         }
       });
-      runfunc = "run(${parameter.join(",")})";
+      runFunc = "run(${parameter.join(",")})";
     }
 
     try {
@@ -56,7 +54,7 @@ class _ComState extends State<ConmonJavascriptScreen> {
 (function(){
   $js
   if (typeof run === 'function') {
-     return $runfunc
+     return $runFunc
   } else {
     console.log('not found run function')
     return ""
@@ -86,7 +84,10 @@ class _ComState extends State<ConmonJavascriptScreen> {
         crossPlatform: InAppWebViewOptions(),
       ),
       onWebViewCreated: (controller) {
-        print('HeadlessInAppWebView created!');
+//        print('HeadlessInAppWebView created!');
+        setState(() {
+          log = log + "workspace created successfully\n\n";
+        });
       },
       onConsoleMessage: (controller, consoleMessage) {
         setState(() {
@@ -95,14 +96,19 @@ class _ComState extends State<ConmonJavascriptScreen> {
 //        print("CONSOLE MESSAGE: " + consoleMessage.message);
       },
       onLoadStart: (controller, url) async {
-        print("onLoadStart $url");
+//        print("onLoadStart $url");
+        setState(() {
+          log = log + "loading, please wait...\n\n";
+        });
       },
       onLoadStop: (controller, url) async {
-        print("onLoadStop $url");
-        inject();
+        setState(() {
+          log = log + "resource loaded successfully, executing...\n\n";
+        });
+        await inject();
       },
       onUpdateVisitedHistory: (controller, url, androidIsReload) {
-        print("onUpdateVisitedHistory $url");
+//        print("onUpdateVisitedHistory $url");
       },
     );
 
@@ -144,7 +150,7 @@ class _ComState extends State<ConmonJavascriptScreen> {
                   await headlessWebView?.dispose();
                   await headlessWebView?.run();
                   setState(() {
-                    this.log = firstview;
+                    this.log = 'retry, please wait...\n\n';
                   });
                 },
                 child: Text("Restart")),
@@ -155,9 +161,9 @@ class _ComState extends State<ConmonJavascriptScreen> {
                   var t = """
 ${obj.name} ${obj.version}
 
-HOME：${obj.page}
-JAVASCRIPT：${obj.javascript.replaceAll(server, "server")}
-PARAMETER：${obj.parameter}
+HOME:${obj.page}
+JAVASCRIPT:${obj.javascript.replaceAll(server, "server")}
+PARAMETER:${obj.parameter}
 """;
                   MyDialog.info(context, t);
                 } catch (e) {}
@@ -165,16 +171,17 @@ PARAMETER：${obj.parameter}
             ),
             ElevatedButton(
                 onPressed: () {
-                  if (result.toString() != "") {
-                    Clipboard.setData(ClipboardData(text: result.toString()));
-                    setState(() {
-                      log = log + "copied successful" + '\n\n';
-                    });
+                  var r = result.toString();
+                  var mes = "copied successfully";
+                  if (r != "" && r != "null") {
+                    Clipboard.setData(ClipboardData(text: r));
                   } else {
-                    setState(() {
-                      log = log + "no data, copy failed" + '\n\n';
-                    });
+                    mes = "no data, copy failed";
                   }
+
+                  setState(() {
+                    log = log + mes + '\n\n';
+                  });
                 },
                 child: Text("Copy")),
           ],

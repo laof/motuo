@@ -1,10 +1,10 @@
-import 'package:motuo/js.cache.dart';
+import 'package:motuo/cache_js.dart';
 import 'package:motuo/my_dialog.dart';
-import 'package:motuo/setting.data.dart';
+import 'package:motuo/sys.data.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:motuo/url.dart';
+import 'package:motuo/conf.dart';
 import 'main.dart';
 
 class MyChromeSafariBrowser extends ChromeSafariBrowser {

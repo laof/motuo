@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:motuo/conf.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -9,7 +10,10 @@ class Javascript {
 
   Javascript(String str) {
     this._url = str;
-    this._filename = Uri.encodeComponent(str);
+    print(str);
+    _filename = str.replaceAll(server, "server");
+    _filename = _filename.replaceAll("/", ".");
+    print(_filename);
   }
 
   file() async {
@@ -31,7 +35,7 @@ class Javascript {
 
   init() async {
     File f = await file();
-    if (await f.exists()==false) {
+    if (await f.exists() == false) {
       await update();
     }
   }

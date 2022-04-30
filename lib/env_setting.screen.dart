@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:motuo/env.data.dart';
 import 'package:motuo/my_dialog.dart';
-import 'package:motuo/setting.data.dart';
+import 'package:motuo/sys.data.dart';
 import 'main.dart';
 
 class Env extends ChromeSafariBrowser {

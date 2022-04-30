@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:motuo/url.dart';
+import 'package:motuo/conf.dart';
 import 'package:path_provider/path_provider.dart';
 
 class SettingMap {
@@ -58,7 +58,7 @@ class SettingList {
     var b = await f.exists();
     if (b) {
       await loadList();
-    } else{
+    } else {
       await update();
     }
     return b;

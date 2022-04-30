@@ -7,9 +7,9 @@ import 'package:motuo/env_setting.screen.dart';
 import 'package:motuo/env.data.dart';
 
 import 'package:motuo/login.dart';
-import 'package:motuo/js.cache.dart';
-import 'package:motuo/setting.screen.dart';
-import 'package:motuo/setting.data.dart';
+import 'package:motuo/cache_js.dart';
+import 'package:motuo/sys.screen.dart';
+import 'package:motuo/sys.data.dart';
 import 'package:permission_handler_platform_interface/permission_handler_platform_interface.dart';
 import 'package:motuo/com_javascript_screen.dart';
 
@@ -46,10 +46,10 @@ Future main() async {
   await es.init();
 
   SettingList sl = SettingList();
-  var isFirst = await sl.init();
+  var exists = await sl.init();
   sm = sl.list;
 
-  if (isFirst) {
+  if (!exists) {
     await Future.forEach(sm, (dynamic element) async {
       Javascript js = Javascript(element.javascript);
       await js.init();
