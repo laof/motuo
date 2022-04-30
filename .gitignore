@@ -30,6 +30,7 @@
 build/
 
 # Android related
+motuo.apk
 **/android/**/gradle-wrapper.jar
 **/android/.gradle
 **/android/captures/
