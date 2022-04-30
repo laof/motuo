@@ -170,6 +170,9 @@ class _ScreenState extends State<JavascriptScreen> {
                 onPressed: () async {
                   await headlessWebView?.dispose();
                   await headlessWebView?.run();
+                  setState(() {
+                    this.log = "";
+                  });
                 },
                 child: Text("Restart")),
             ElevatedButton(

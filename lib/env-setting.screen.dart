@@ -89,7 +89,7 @@ class PageState extends State<EnvListScreen> {
     return Scaffold(
         appBar: AppBar(
             title: Text(
-          "Env variable setting",
+          "Env variable",
         )),
         drawer: myDrawer(context: context),
         body: SafeArea(

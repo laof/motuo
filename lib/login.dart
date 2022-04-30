@@ -90,7 +90,7 @@ class LoginState extends State<Login> {
 
       if (wifiName == null) {
         setState(() {
-          log = '没有连到wifi';
+          log = '没有连接WIFI';
         });
         return;
       } else {
@@ -108,7 +108,7 @@ class LoginState extends State<Login> {
 
       if (response.statusCode == 200 && response.body.contains(okstr)) {
         setState(() {
-          log = '已登录成功';
+          log = '网络可用，已经登录';
         });
         return;
       }
