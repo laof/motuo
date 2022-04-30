@@ -1,13 +1,10 @@
-import 'dart:io';
-
 import 'package:motuo/js.cache.dart';
 import 'package:motuo/my-dialog.dart';
 import 'package:motuo/setting.data.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:motuo/url.dart';
 import 'main.dart';
 
 class MyChromeSafariBrowser extends ChromeSafariBrowser {
@@ -42,6 +39,9 @@ class _ChromeSafariBrowserExampleScreenState
   _loadfile() async {
     SettingList sl = SettingList();
     String str = await sl.readAsString();
+
+    str.replaceAll(server, "server");
+
     setState(() {
       log = str;
     });

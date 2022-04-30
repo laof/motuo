@@ -1,4 +1,4 @@
-set app= motuo.apk
+set app=motuo.apk
 flutter build apk &&^
 copy build\app\outputs\apk\release\app-release.apk .\ &&^
 del/f/s/q %app%  &&^

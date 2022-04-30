@@ -5,8 +5,8 @@ import 'package:motuo/env.data.dart';
 import 'package:motuo/my-dialog.dart';
 import 'package:motuo/js.cache.dart';
 import 'package:motuo/setting.data.dart';
+import 'package:motuo/url.dart';
 import 'package:permission_handler_platform_interface/permission_handler_platform_interface.dart';
-import 'package:network_info_plus/network_info_plus.dart';
 
 import 'main.dart';
 
@@ -161,7 +161,9 @@ class _ScreenState extends State<JavascriptScreen> {
 //            child: Text("CURRENT URL:${url}"),
 //          ),
 
-          ListView(children: [Padding(padding: const EdgeInsets.all(8), child: Text(log))])
+          ListView(children: [
+            Padding(padding: const EdgeInsets.all(8), child: Text(log))
+          ])
         ])),
         ButtonBar(
           alignment: MainAxisAlignment.center,
@@ -179,12 +181,11 @@ class _ScreenState extends State<JavascriptScreen> {
               child: Icon(Icons.settings_accessibility_sharp),
               onPressed: () {
                 try {
-                  var t =
-"""
+                  var t = """
 ${obj.name} ${obj.version}
 
 HOME：${obj.page}
-JAVASCRIPT：${obj.javascript}
+JAVASCRIPT：${obj.javascript.replaceAll(server, "server")}
 PARAMETER：${obj.parameter}
 """;
                   MyDialog.info(context, t);
