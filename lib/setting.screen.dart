@@ -40,10 +40,8 @@ class _ChromeSafariBrowserExampleScreenState
     SettingList sl = SettingList();
     String str = await sl.readAsString();
 
-    str.replaceAll(server, "server");
-
     setState(() {
-      log = str;
+      log = str.replaceAll(server, "server");
     });
   }
 
