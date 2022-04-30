@@ -10,3 +10,5 @@ For help getting started with Flutter, view our online
 
 ## build
 flutter build apk
+
+git push origin :refs/tags/v1.0.0
