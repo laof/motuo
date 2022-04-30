@@ -31,7 +31,7 @@ class Javascript {
 
   init() async {
     File f = await file();
-    if (!(await f.exists())) {
+    if (await f.exists()==false) {
       await update();
     }
   }

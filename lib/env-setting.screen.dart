@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:flutter_inappwebview_example/env.data.dart';
-import 'package:flutter_inappwebview_example/my-dialog.dart';
-import 'package:flutter_inappwebview_example/setting.data.dart';
+import 'package:motuo/env.data.dart';
+import 'package:motuo/my-dialog.dart';
+import 'package:motuo/setting.data.dart';
 import 'main.dart';
 
 class Env extends ChromeSafariBrowser {
@@ -108,6 +108,14 @@ class PageState extends State<EnvListScreen> {
                     var data = json.encode(map); //将map数据转换为json字符串
                     EnvSetup es = EnvSetup();
                     await es.writeAsString(data);
+                    FocusScopeNode currentScope = FocusScope.of(context);
+                    if (!currentScope.hasPrimaryFocus &&
+                        currentScope.hasFocus) {
+                      var aa = FocusManager.instance.primaryFocus;
+                      if (aa != null) {
+                        aa.unfocus();
+                      }
+                    }
                     MyDialog.info(context, 'Setup success');
                   },
                   child: Icon(Icons.done_outlined)),

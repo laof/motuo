@@ -3,19 +3,16 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:flutter_inappwebview_example/env-setting.screen.dart';
-import 'package:flutter_inappwebview_example/env.data.dart';
+import 'package:motuo/env-setting.screen.dart';
+import 'package:motuo/env.data.dart';
 
-import 'package:flutter_inappwebview_example/headless_in_app_webview.screen.dart'
-    show HeadlessInAppWebViewExampleScreen;
-import 'package:flutter_inappwebview_example/in_app_webiew_example.screen.dart';
-import 'package:flutter_inappwebview_example/in_app_browser_example.screen.dart'
-    show InAppBrowserExampleScreen;
 
-import 'package:flutter_inappwebview_example/in_app_javascript_screen.dart';
-import 'package:flutter_inappwebview_example/js.cache.dart';
-import 'package:flutter_inappwebview_example/setting.screen.dart';
-import 'package:flutter_inappwebview_example/setting.data.dart';
+import 'package:motuo/login.dart';
+import 'package:motuo/js.cache.dart';
+import 'package:motuo/setting.screen.dart';
+import 'package:motuo/setting.data.dart';
+import 'package:permission_handler_platform_interface/permission_handler_platform_interface.dart';
+import 'package:motuo/in_app_javascript_screen.dart';
 
 List<SettingMap> sm = [];
 
@@ -46,13 +43,14 @@ Future main() async {
     }
   }
 
-  SettingList sl = SettingList();
 
   EnvSetup es = EnvSetup();
   await es.init();
 
+  SettingList sl = SettingList();
   var isFirst = await sl.init();
   sm = sl.list;
+
 
   if (isFirst) {
     await Future.forEach(sm, (dynamic element) async {
@@ -60,6 +58,11 @@ Future main() async {
       await js.init();
     });
   }
+
+  final PermissionHandlerPlatform _permissionHandler =
+      PermissionHandlerPlatform.instance;
+
+  await _permissionHandler.requestPermissions([Permission.location]);
 
   runApp(MyApp());
 }
@@ -71,7 +74,7 @@ Drawer myDrawer({required BuildContext context}) {
         list.add(ListTile(
           title: Text(element.name),
           onTap: () {
-            Navigator.pushReplacementNamed(context, '/my_' + element.id);
+            Navigator.pushReplacementNamed(context, '/my_' + element.name);
           },
         ))
       });
@@ -82,7 +85,7 @@ Drawer myDrawer({required BuildContext context}) {
       children: <Widget>[
         DrawerHeader(
           child: Text(
-            'My Browser',
+            'Motuo',
             style: TextStyle(color: Colors.white, fontSize: 18),
           ),
           decoration: BoxDecoration(
@@ -91,31 +94,13 @@ Drawer myDrawer({required BuildContext context}) {
         ),
         ...list,
         ListTile(
-          title: Text('Browser'),
-          onTap: () {
-            Navigator.pushReplacementNamed(context, '/browser');
-          },
-        ),
-        ListTile(
-          title: Text('WebView'),
-          onTap: () {
-            Navigator.pushReplacementNamed(context, '/webview');
-          },
-        ),
-        ListTile(
-          title: Text('Headless'),
-          onTap: () {
-            Navigator.pushReplacementNamed(context, '/headless');
-          },
-        ),
-        ListTile(
           title: Text('Env variable'),
           onTap: () {
             Navigator.pushReplacementNamed(context, '/env');
           },
         ),
         ListTile(
-          title: Text('Setting'),
+          title: Text('Sys config'),
           onTap: () {
             Navigator.pushReplacementNamed(context, '/setting');
           },
@@ -144,21 +129,23 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     Map<String, WidgetBuilder> map = {
-      '/browser': (context) => InAppBrowserExampleScreen(),
-      '/webview': (context) => InAppWebViewExampleScreen(),
+//      '/browser': (context) => InAppBrowserExampleScreen(),
+//      '/webview': (context) => InAppWebViewExampleScreen(),
+//      '/headless': (context) => HeadlessInAppWebViewExampleScreen(),
       '/env': (context) => EnvListScreen(),
-      '/headless': (context) => HeadlessInAppWebViewExampleScreen(),
       '/setting': (context) => ChromeSafariBrowserExampleScreen(),
     };
 
     String first = "";
     sm.forEach((obj) {
-      var key = '/my_' + obj.id;
+      var key = '/my_' + obj.name;
 
       if (first == "") {
         first = key;
+        map[key] = (context) => Login(obj);
+      } else {
+        map[key] = (context) => JavascriptScreen(obj);
       }
-      map[key] = (context) => JavascriptScreen(obj);
     });
     return MaterialApp(initialRoute: first, routes: map);
   }

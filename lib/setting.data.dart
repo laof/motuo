@@ -1,23 +1,24 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:motuo/url.dart';
 import 'package:path_provider/path_provider.dart';
 
 class SettingMap {
-  String id = "";
   String name = "";
-  String title = "";
   String page = "";
   String javascript = "";
+  String version = "";
   List<dynamic> parameter = [];
+  List<dynamic> variable = [];
 
   SettingMap(Map map) {
-    this.id = map["id"];
     this.name = map["name"];
-    this.title = map["title"];
     this.page = map["page"];
+    this.version = map["version"];
     this.javascript = map["javascript"];
     this.parameter = map["parameter"].toList();
+    this.variable = map["variable"].toList();
   }
 }
 
@@ -26,7 +27,7 @@ class SettingList {
 
   file() async {
     final dir = await getApplicationSupportDirectory();
-    return File('${dir.path}/job.json');
+    return File('${dir.path}/jobv2.json');
   }
 
   loadList() async {
@@ -45,7 +46,7 @@ class SettingList {
   }
 
   update() async {
-    final url = Uri.parse("https://laof.github.io/assets/data/f.json");
+    final url = Uri.parse(config);
     File f = await file();
     var response = await http.get(url);
     await f.writeAsString(response.body);
@@ -55,10 +56,11 @@ class SettingList {
   init() async {
     File f = await file();
     var b = await f.exists();
-    if (!b) {
+    if (b) {
+      await loadList();
+    } else{
       await update();
     }
-    await loadList();
-    return !b;
+    return b;
   }
 }

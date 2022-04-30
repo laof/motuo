@@ -1,14 +1,13 @@
 import 'dart:io';
 
-import 'package:flutter_inappwebview_example/js.cache.dart';
-import 'package:flutter_inappwebview_example/my-dialog.dart';
-import 'package:flutter_inappwebview_example/setting.data.dart';
+import 'package:motuo/js.cache.dart';
+import 'package:motuo/my-dialog.dart';
+import 'package:motuo/setting.data.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:path_provider/path_provider.dart';
 import 'main.dart';
 
 class MyChromeSafariBrowser extends ChromeSafariBrowser {
@@ -71,7 +70,7 @@ class _ChromeSafariBrowserExampleScreenState
     return Scaffold(
         appBar: AppBar(
             title: Text(
-          "Setting",
+          "Sys config",
         )),
         drawer: myDrawer(context: context),
         body: SafeArea(
@@ -81,7 +80,10 @@ class _ChromeSafariBrowserExampleScreenState
               Expanded(
                 child: Stack(children: [
                   ListView(
-                    children: [Text(log)],
+                    children: [
+                      Padding(
+                          padding: const EdgeInsets.all(8), child: Text(log))
+                    ],
                   )
                 ]),
               ),

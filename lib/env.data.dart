@@ -10,7 +10,7 @@ class EnvSetup {
 
   file() async {
     final dir = await getApplicationSupportDirectory();
-    return File('${dir.path}/fdf9_836741489af_fds968466845_fds37485_env.json');
+    return File('${dir.path}/fdf9_8362af_fds9r845_fds37485_env.json');
   }
 
   loadMap() async {

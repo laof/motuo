@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:flutter_inappwebview_example/env.data.dart';
-import 'package:flutter_inappwebview_example/my-dialog.dart';
-import 'package:flutter_inappwebview_example/js.cache.dart';
-import 'package:flutter_inappwebview_example/setting.data.dart';
+import 'package:motuo/env.data.dart';
+import 'package:motuo/my-dialog.dart';
+import 'package:motuo/js.cache.dart';
+import 'package:motuo/setting.data.dart';
+import 'package:permission_handler_platform_interface/permission_handler_platform_interface.dart';
+import 'package:network_info_plus/network_info_plus.dart';
 
 import 'main.dart';
 
@@ -57,10 +59,8 @@ class _ScreenState extends State<JavascriptScreen> {
   $js
   if (typeof run === 'function') {
     $runfunc
-    return "true"
   } else {
     console.log('not found run function')
-    return "false"
   }
 })()
     """));
@@ -80,10 +80,25 @@ class _ScreenState extends State<JavascriptScreen> {
     } on MissingPluginException {}
   }
 
+  final PermissionHandlerPlatform _permissionHandler =
+      PermissionHandlerPlatform.instance;
+  PermissionStatus _permissionStatus = PermissionStatus.denied;
+  Future<void> requestPermission() async {
+//    setState(() {
+//      print(status);
+//      _permissionStatus = status[Permission] ?? PermissionStatus.denied;
+//      print(_permissionStatus);
+//    });
+  }
+
   @override
   void initState() {
     super.initState();
+    requestPermission();
+    createHeadlessWebView();
+  }
 
+  createHeadlessWebView() async {
     headlessWebView = new HeadlessInAppWebView(
       initialUrlRequest: URLRequest(url: Uri.parse(obj.page)),
       initialOptions: InAppWebViewGroupOptions(
@@ -134,7 +149,7 @@ class _ScreenState extends State<JavascriptScreen> {
     return Scaffold(
       appBar: AppBar(
           title: Text(
-        obj.title,
+        obj.name,
       )),
       drawer: myDrawer(context: context),
       body: SafeArea(
@@ -146,7 +161,7 @@ class _ScreenState extends State<JavascriptScreen> {
 //            child: Text("CURRENT URL:${url}"),
 //          ),
 
-          ListView(children: [Text(log)])
+          ListView(children: [Padding(padding: const EdgeInsets.all(8), child: Text(log))])
         ])),
         ButtonBar(
           alignment: MainAxisAlignment.center,
@@ -162,7 +177,13 @@ class _ScreenState extends State<JavascriptScreen> {
               onPressed: () {
                 try {
                   var t =
-                      "id:${obj.id}\n\nhome:${obj.page}\n\njs:${obj.javascript}\n\nparameter:${obj.parameter}";
+"""
+${obj.name} ${obj.version}
+
+HOME：${obj.page}
+JAVASCRIPT：${obj.javascript}
+PARAMETER：${obj.parameter}
+""";
                   MyDialog.info(context, t);
                 } catch (e) {}
               },
