@@ -174,9 +174,8 @@ class LoginState extends State<Login> {
                 onPressed: () async {
                   var route = ModalRoute.of(context);
                   if (route != null) {
-                    print(route.settings.name);
-                    await Navigator.of(context)
-                        .pushNamed(route.settings.name.toString());
+                    await Navigator.pushReplacementNamed(
+                        context, route.settings.name.toString());
                   }
                 },
                 child: Icon(Icons.refresh)),

@@ -3,16 +3,15 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:motuo/env-setting.screen.dart';
+import 'package:motuo/env_setting.screen.dart';
 import 'package:motuo/env.data.dart';
-
 
 import 'package:motuo/login.dart';
 import 'package:motuo/js.cache.dart';
 import 'package:motuo/setting.screen.dart';
 import 'package:motuo/setting.data.dart';
 import 'package:permission_handler_platform_interface/permission_handler_platform_interface.dart';
-import 'package:motuo/in_app_javascript_screen.dart';
+import 'package:motuo/com_javascript_screen.dart';
 
 List<SettingMap> sm = [];
 
@@ -43,14 +42,12 @@ Future main() async {
     }
   }
 
-
   EnvSetup es = EnvSetup();
   await es.init();
 
   SettingList sl = SettingList();
   var isFirst = await sl.init();
   sm = sl.list;
-
 
   if (isFirst) {
     await Future.forEach(sm, (dynamic element) async {
@@ -144,7 +141,7 @@ class _MyAppState extends State<MyApp> {
         first = key;
         map[key] = (context) => Login(obj);
       } else {
-        map[key] = (context) => JavascriptScreen(obj);
+        map[key] = (context) => ConmonJavascriptScreen(obj);
       }
     });
     return MaterialApp(initialRoute: first, routes: map);

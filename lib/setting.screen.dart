@@ -1,5 +1,5 @@
 import 'package:motuo/js.cache.dart';
-import 'package:motuo/my-dialog.dart';
+import 'package:motuo/my_dialog.dart';
 import 'package:motuo/setting.data.dart';
 
 import 'package:flutter/material.dart';

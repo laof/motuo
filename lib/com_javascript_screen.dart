@@ -2,32 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:motuo/env.data.dart';
-import 'package:motuo/my-dialog.dart';
+import 'package:motuo/my_dialog.dart';
 import 'package:motuo/js.cache.dart';
 import 'package:motuo/setting.data.dart';
 import 'package:motuo/url.dart';
-import 'package:permission_handler_platform_interface/permission_handler_platform_interface.dart';
-
 import 'main.dart';
 
-class JavascriptScreen extends StatefulWidget {
-  SettingMap obj;
-  JavascriptScreen(this.obj);
+var firstview = 'Loading, please wait...\n\n';
 
+class ConmonJavascriptScreen extends StatefulWidget {
+  SettingMap obj;
+  ConmonJavascriptScreen(this.obj);
   @override
-  _ScreenState createState() => new _ScreenState(this.obj);
+  _ComState createState() => new _ComState(this.obj);
 }
 
-class _ScreenState extends State<JavascriptScreen> {
+class _ComState extends State<ConmonJavascriptScreen> {
   HeadlessInAppWebView? headlessWebView;
-  String url = "";
-  String log = "";
-
+  String result = "";
+  String log = firstview ;
   SettingMap obj;
 
-  _ScreenState(this.obj);
+  _ComState(this.obj);
 
-  _zhuru() async {
+  inject() async {
     var runfunc = "run()";
 
     List<dynamic> plist = obj.parameter;
@@ -53,48 +51,31 @@ class _ScreenState extends State<JavascriptScreen> {
       Javascript javascript = Javascript(obj.javascript);
       var js = await javascript.loadFile();
 
-      String metaTagList = (await headlessWebView?.webViewController
+      var r = await headlessWebView?.webViewController
           .evaluateJavascript(source: """
 (function(){
   $js
   if (typeof run === 'function') {
-    $runfunc
+     return $runfunc
   } else {
     console.log('not found run function')
+    return ""
   }
 })()
-    """));
+    """);
 
-      setState(() {
-        this.log = this.log + metaTagList + '\n\n';
-      });
+      if (r.toString() != "") {
+        result = r.toString();
+      }
     } on MissingPluginException {
       print(
           "HeadlessInAppWebView is not running. Click on \"Run HeadlessInAppWebView\"!");
     }
   }
 
-  _run() async {
-    try {
-      await headlessWebView?.run();
-    } on MissingPluginException {}
-  }
-
-  final PermissionHandlerPlatform _permissionHandler =
-      PermissionHandlerPlatform.instance;
-  PermissionStatus _permissionStatus = PermissionStatus.denied;
-  Future<void> requestPermission() async {
-//    setState(() {
-//      print(status);
-//      _permissionStatus = status[Permission] ?? PermissionStatus.denied;
-//      print(_permissionStatus);
-//    });
-  }
-
   @override
   void initState() {
     super.initState();
-    requestPermission();
     createHeadlessWebView();
   }
 
@@ -111,27 +92,17 @@ class _ScreenState extends State<JavascriptScreen> {
         setState(() {
           this.log = this.log + consoleMessage.message + '\n\n';
         });
-
-        print("CONSOLE MESSAGE: " + consoleMessage.message);
+//        print("CONSOLE MESSAGE: " + consoleMessage.message);
       },
       onLoadStart: (controller, url) async {
         print("onLoadStart $url");
-        setState(() {
-          this.url = url.toString();
-        });
       },
       onLoadStop: (controller, url) async {
         print("onLoadStop $url");
-        setState(() {
-          _zhuru();
-          this.url = url.toString();
-        });
+        inject();
       },
       onUpdateVisitedHistory: (controller, url, androidIsReload) {
         print("onUpdateVisitedHistory $url");
-        setState(() {
-          this.url = url.toString();
-        });
       },
     );
 
@@ -173,7 +144,7 @@ class _ScreenState extends State<JavascriptScreen> {
                   await headlessWebView?.dispose();
                   await headlessWebView?.run();
                   setState(() {
-                    this.log = "";
+                    this.log = firstview;
                   });
                 },
                 child: Text("Restart")),
@@ -194,9 +165,18 @@ PARAMETER：${obj.parameter}
             ),
             ElevatedButton(
                 onPressed: () {
-                  headlessWebView?.dispose();
+                  if (result.toString() != "") {
+                    Clipboard.setData(ClipboardData(text: result.toString()));
+                    setState(() {
+                      log = log + "copied successful" + '\n\n';
+                    });
+                  } else {
+                    setState(() {
+                      log = log + "no data, copy failed" + '\n\n';
+                    });
+                  }
                 },
-                child: Text("Dispose")),
+                child: Text("Copy")),
           ],
         ),
       ])),

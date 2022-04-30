@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:motuo/env.data.dart';
-import 'package:motuo/my-dialog.dart';
+import 'package:motuo/my_dialog.dart';
 import 'package:motuo/setting.data.dart';
 import 'main.dart';
 
