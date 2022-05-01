@@ -18,58 +18,16 @@ jobs:
           flutter-version: "2.10.5"
       - run: flutter --version
       - run: flutter pub get
-      # - run: flutter build apk
+      - run: flutter build apk
 
       - uses: dart-lang/setup-dart@v1
       - run: dart --version
-      # - run: dart run cd.dart apk
-      - uses: JamesIves/github-pages-deploy-action@v4.3.0
+
+      - uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
           token: ${{ secrets.CDAPK }}
           repository-name: laof/laof.github.io
-          target-folder: assets
+          target-folder: flutter-apk
           branch: main
           commit-message: added motuo.apk by github action
-          # folder: build/app/outputs/flutter-apk
-          folder: android/gradle/wrapper
-
-  #     - name: git commit
-  #       run: |
-  #         git config --global user.email 345603828@qq.com
-  #         git config --global user.name laof
-  #         git add .
-  #         git commit -m 'added motuo-apk.apk'
-
-  #     - name: deploy
-  #       uses: ad-m/github-push-action@master
-  #       with:
-  #         github_token: ${{ secrets.GITHUB_TOKEN }}
-
-  # build-ios:
-  #   name: build app
-  #   runs-on: macos-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: subosito/flutter-action@v2
-  #       with:
-  #         flutter-version: "2.10.5"
-  #         architecture: x64
-  #     - run: flutter --version
-  #     - run: flutter pub get
-  #     - run: flutter build ios --release --no-codesign
-
-  #     - uses: dart-lang/setup-dart@v1
-  #     - run: dart --version
-  #     - run: dart run cd.dart app
-
-  #     - name: git commit
-  #       run: |
-  #         git config --global user.email 345603828@qq.com
-  #         git config --global user.name laof
-  #         git add .
-  #         git commit -m 'added motuo-app.app'
-
-  #     - name: deploy
-  #       uses: ad-m/github-push-action@master
-  #       with:
-  #         github_token: ${{ secrets.GITHUB_TOKEN }}
+          folder: build/app/outputs/flutter-apk
