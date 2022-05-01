@@ -30,6 +30,7 @@
 build/
 
 # Android related
+app/
 motuo.apk
 app-release.apk
 **/android/**/gradle-wrapper.jar
