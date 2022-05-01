@@ -23,7 +23,7 @@ jobs:
       - uses: dart-lang/setup-dart@v1
       - run: dart --version
       # - run: dart run cd.dart apk
-      - uses: JamesIves/github-pages-deploy-action@releases/@v4.3.3
+      - uses: JamesIves/github-pages-deploy-action@v4.3.0
         with:
           token: ${{ secrets.CDAPK }}
           repository-name: laof/laof.github.io
