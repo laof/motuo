@@ -31,7 +31,7 @@ jobs:
           branch: main
           commit-message: added motuo.apk by github action
           # folder: build/app/outputs/flutter-apk
-          floder: android/gradle/wrapper
+          folder: android/gradle/wrapper
 
   #     - name: git commit
   #       run: |
