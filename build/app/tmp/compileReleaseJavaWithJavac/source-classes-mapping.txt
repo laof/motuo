@@ -1,0 +1,8 @@
+io/flutter/plugins/GeneratedPluginRegistrant.java
+ io.flutter.plugins.GeneratedPluginRegistrant
+com/pichillilorenzo/motuo/BuildConfig.java
+ com.pichillilorenzo.motuo.BuildConfig
+com/pichillilorenzo/flutterwebviewexample/EmbedderV1Activity.java
+ com.pichillilorenzo.flutterwebviewexample.EmbedderV1Activity
+com/pichillilorenzo/flutterwebviewexample/MainActivity.java
+ com.pichillilorenzo.flutterwebviewexample.MainActivity

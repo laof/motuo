@@ -1,0 +1,4 @@
+#Sun May 01 07:34:36 UTC 2022
+base.0=/home/runner/work/motuo/motuo/build/app/intermediates/dex/release/minifyReleaseWithR8/classes.dex
+renamed.0=classes.dex
+path.0=classes.dex
