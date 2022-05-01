@@ -13,7 +13,7 @@ void main(List<String> args) {
 
     apk.copySync("motuo-apk.apk");
   } else {
-    File app = File('build/ios/iphoneos/Runner.app.');
-    app.copySync("motuo-app.app");
+    // File app = File('build/ios/iphoneos/Runner.app.');
+    // app.copySync("motuo-app.app");
   }
 }
