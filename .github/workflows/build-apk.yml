@@ -18,7 +18,6 @@ jobs:
     - run: flutter --version
     - run: flutter pub get
     - run: flutter build apk
-
   build:
     runs-on: macos-latest
     steps:
