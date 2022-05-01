@@ -22,6 +22,7 @@ jobs:
 
       - uses: dart-lang/setup-dart@v1
       - run: dart --version
+      - run: dart run deploy.dart dart-task
 
       - uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
