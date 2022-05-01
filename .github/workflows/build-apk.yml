@@ -18,7 +18,7 @@ jobs:
           flutter-version: "2.10.5"
       - run: flutter --version
       - run: flutter pub get
-      - run: flutter build apk
+      # - run: flutter build apk
 
       - uses: dart-lang/setup-dart@v1
       - run: dart --version
@@ -30,7 +30,8 @@ jobs:
           target-folder: assets
           branch: main
           commit-message: added motuo.apk by github action
-          folder: ~build/app/outputs/flutter-apk
+          # folder: build/app/outputs/flutter-apk
+          floder: android/gradle/wrapper
 
   #     - name: git commit
   #       run: |
