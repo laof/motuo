@@ -27,7 +27,7 @@ jobs:
         with:
           token: ${{ secrets.CDAPK }}
           repository-name: laof/laof.github.io
-          target-folder: flutter-apk
+          target-folder: app
           branch: main
           commit-message: added motuo.apk by github action
-          folder: build/app/outputs/flutter-apk
+          folder: app
