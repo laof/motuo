@@ -7,57 +7,60 @@ jobs:
     name: build apk
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-java@v2
-    - uses: dart-lang/setup-dart@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v2
+        with:
+          distribution: "zulu"
+          java-version: "11"
 
-      with:
-        distribution: 'zulu'
-        java-version: '11'
-    - uses: subosito/flutter-action@v2
-      with:
-        flutter-version: '2.10.5'
-    - run: flutter --version
-    - run: dart --version
-    - run: flutter pub get
-    - run: flutter build apk
-    - run: dart run cd.dart apk
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "2.10.5"
+      - run: flutter --version
+      - run: flutter pub get
+      - run: flutter build apk
 
-    - name: git commit
-      run:  |
-        git config --global user.email 345603828@qq.com
-        git config --global user.name laof
-        git add .
-        git commit -m 'added motuo-apk.apk'
+      - uses: dart-lang/setup-dart@v1
+      - run: dart --version
+      - run: dart run cd.dart apk
 
-    - name: deploy
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: git commit
+        run: |
+          git config --global user.email 345603828@qq.com
+          git config --global user.name laof
+          git add .
+          git commit -m 'added motuo-apk.apk'
 
+      - name: deploy
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
   build-ios:
     name: build app
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: subosito/flutter-action@v2
-      with:
-        flutter-version: '2.10.5'
-        architecture: x64
-    - run: flutter --version
-    - run: flutter pub get
-    - run: flutter build ios --release --no-codesign
-    - run: dart run cd.dart app
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "2.10.5"
+          architecture: x64
+      - run: flutter --version
+      - run: flutter pub get
+      - run: flutter build ios --release --no-codesign
 
-    - name: git commit
-      run:  |
-        git config --global user.email 345603828@qq.com
-        git config --global user.name laof
-        git add .
-        git commit -m 'added motuo-app.app'
+      - uses: dart-lang/setup-dart@v1
+      - run: dart --version
+      - run: dart run cd.dart app
 
-    - name: deploy
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: git commit
+        run: |
+          git config --global user.email 345603828@qq.com
+          git config --global user.name laof
+          git add .
+          git commit -m 'added motuo-app.app'
+
+      - name: deploy
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
