@@ -18,7 +18,8 @@ jobs:
     - run: flutter --version
     - run: flutter pub get
     - run: flutter build apk
-
+jobs:
+  build:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v3
