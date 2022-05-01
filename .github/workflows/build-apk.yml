@@ -36,31 +36,31 @@ jobs:
   #       with:
   #         github_token: ${{ secrets.GITHUB_TOKEN }}
 
-  build-ios:
-    name: build app
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: "2.10.5"
-          architecture: x64
-      - run: flutter --version
-      - run: flutter pub get
-      - run: flutter build ios --release --no-codesign
+  # build-ios:
+  #   name: build app
+  #   runs-on: macos-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: subosito/flutter-action@v2
+  #       with:
+  #         flutter-version: "2.10.5"
+  #         architecture: x64
+  #     - run: flutter --version
+  #     - run: flutter pub get
+  #     - run: flutter build ios --release --no-codesign
 
-      - uses: dart-lang/setup-dart@v1
-      - run: dart --version
-      - run: dart run cd.dart app
+  #     - uses: dart-lang/setup-dart@v1
+  #     - run: dart --version
+  #     - run: dart run cd.dart app
 
-      - name: git commit
-        run: |
-          git config --global user.email 345603828@qq.com
-          git config --global user.name laof
-          git add .
-          git commit -m 'added motuo-app.app'
+  #     - name: git commit
+  #       run: |
+  #         git config --global user.email 345603828@qq.com
+  #         git config --global user.name laof
+  #         git add .
+  #         git commit -m 'added motuo-app.app'
 
-      - name: deploy
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: deploy
+  #       uses: ad-m/github-push-action@master
+  #       with:
+  #         github_token: ${{ secrets.GITHUB_TOKEN }}
