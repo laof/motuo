@@ -27,7 +27,7 @@ jobs:
 
       - uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
-          # token: ${{ secrets.CDAPK }}
+          token: ${{ secrets.CDAPK }}
           folder: output
           repository-name: laof/blob
           target-folder: files/motuo
