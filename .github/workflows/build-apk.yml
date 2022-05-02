@@ -23,12 +23,18 @@ jobs:
 
       - uses: dart-lang/setup-dart@v1
       - run: dart --version
+      - run: dart run deploy.dart dart-task
 
       - uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
           token: ${{ secrets.CDAPK }}
+<<<<<<< HEAD
           repository-name: laof/blob
           target-folder: flutter-apk
+=======
+          repository-name: laof/laof.github.io
+          target-folder: app
+>>>>>>> 605a78e130bb0417047f8eb04af0b96a214f145a
           branch: main
           commit-message: added motuo.apk by github action
-          folder: build/app/outputs/flutter-apk
+          folder: app
