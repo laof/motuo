@@ -13,4 +13,4 @@ flutter build apk
 
 
 ## latest version
-[download](https://laof.github.io/app/motuo.apk) the latest version
+[download](https://laof.github.io/bolb/app/motuo.apk) the latest version
