@@ -8,6 +8,6 @@ void main(List<String> args) {
   var pf = args[0];
   print("build folder pipeline: " + pf);
   File apk = File('build/app/outputs/flutter-apk/app-release.apk');
-  new Directory("app").createSync();
-  apk.copySync("app/motuo.apk");
+  new Directory("output").createSync();
+  apk.copySync("output/motuo.apk");
 }

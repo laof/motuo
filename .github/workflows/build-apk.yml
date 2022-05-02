@@ -1,4 +1,4 @@
-name: Motuo CI
+name: Motuo CICD
 
 on: push
 
@@ -27,9 +27,10 @@ jobs:
 
       - uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
-          token: ${{ secrets.CDAPK }}
+          # token: ${{ secrets.CDAPK }}
+          folder: output
           repository-name: laof/blob
-          target-folder: flutter-apk
+          target-folder: files/motuo
           branch: main
           commit-message: added motuo.apk by github action
-          folder: app
+          
