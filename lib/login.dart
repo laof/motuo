@@ -118,7 +118,7 @@ class LoginState extends State<Login> {
       setState(() {
         log = 'testing network...';
       });
-      final response = await http.get(Uri.parse(oktxt));
+//       final response = await http.get(Uri.parse(oktxt));
       
       setState(() {
         log = 'end testing network...';
