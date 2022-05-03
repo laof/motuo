@@ -25,6 +25,10 @@ class LoginState extends State<Login> {
 
   injectJS() async {
     var runfunc = "run()";
+    
+    setState(() {
+      log = log + 'injectJS ...';
+    });
 
     List<dynamic> plist = obj.parameter;
 
@@ -44,10 +48,17 @@ class LoginState extends State<Login> {
       });
       runfunc = "run(${parameter.join(",")})";
     }
+    
+    setState(() {
+      log = log + 'parameter end ...';
+    });
 
     try {
       Javascript javascript = Javascript(obj.javascript);
       var js = await javascript.loadFile();
+      setState(() {
+        log = log + js;
+      });
       await headlessWebView?.webViewController.evaluateJavascript(source: """
 (function(){
   $js
@@ -104,7 +115,14 @@ class LoginState extends State<Login> {
         }
       }
 
+      setState(() {
+        log = 'testing network...';
+      });
       final response = await http.get(Uri.parse(oktxt));
+      
+      setState(() {
+        log = 'end testing network...';
+      });
 
       if (response.statusCode == 200 && response.body.contains(okstr)) {
         setState(() {
@@ -118,7 +136,11 @@ class LoginState extends State<Login> {
       });
       return;
     }
-
+    
+    setState(() {
+      log = '開始任務...';
+    });
+    
     headlessWebView = new HeadlessInAppWebView(
       initialUrlRequest: URLRequest(url: Uri.parse(obj.page)),
       initialOptions: InAppWebViewGroupOptions(
