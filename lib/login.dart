@@ -124,12 +124,12 @@ class LoginState extends State<Login> {
         log = 'end testing network...';
       });
 
-      if (response.statusCode == 200 && response.body.contains(okstr)) {
-        setState(() {
-          log = '网络可用，已经登录';
-        });
-        return;
-      }
+//       if (response.statusCode == 200 && response.body.contains(okstr)) {
+//         setState(() {
+//           log = '网络可用，已经登录';
+//         });
+//         return;
+//       }
     } on PlatformException catch (e) {
       setState(() {
         log = '检查网络环境失败';
