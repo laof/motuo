@@ -4,7 +4,6 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:motuo/env.data.dart';
 import 'package:motuo/cache_js.dart';
 import 'package:motuo/sys.data.dart';
-import 'package:motuo/conf.dart';
 import 'package:permission_handler_platform_interface/permission_handler_platform_interface.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:http/http.dart' as http;
@@ -20,60 +19,9 @@ class Login extends StatefulWidget {
 class LoginState extends State<Login> {
   HeadlessInAppWebView? headlessWebView;
   String log = "";
+  String runfunc = "run()";
   SettingMap obj;
   LoginState(this.obj);
-
-  injectJS() async {
-    var runfunc = "run()";
-    
-    setState(() {
-      log = log + 'injectJS ...';
-    });
-
-    List<dynamic> plist = obj.parameter;
-
-    if (plist.length > 0) {
-      EnvSetup es = EnvSetup();
-      await es.loadMap();
-
-      Map map = es.map;
-      List parameter = [];
-
-      obj.parameter.forEach((key) {
-        if (map.containsKey(key)) {
-          parameter.add("'" + map[key] + "'");
-        } else {
-          parameter.add(Null);
-        }
-      });
-      runfunc = "run(${parameter.join(",")})";
-    }
-    
-    setState(() {
-      log = log + 'parameter end ...';
-    });
-
-    try {
-      Javascript javascript = Javascript(obj.javascript);
-      var js = await javascript.loadFile();
-      setState(() {
-        log = log + js;
-      });
-      await headlessWebView?.webViewController.evaluateJavascript(source: """
-(function(){
-  $js
-  if (typeof run === 'function') {
-    $runfunc
-  } else {
-    console.log('not found run function')
-  }
-})()
-    """);
-    } on MissingPluginException {
-      print(
-          "HeadlessInAppWebView is not running. Click on \"Run HeadlessInAppWebView\"!");
-    }
-  }
 
   @override
   void initState() {
@@ -81,15 +29,47 @@ class LoginState extends State<Login> {
     checkNetwork();
   }
 
+  checkParameter() async {
+    List<dynamic> plist = obj.parameter;
+
+    if (plist.length > 0) {
+      EnvSetup es = EnvSetup();
+      await es.loadMap();
+
+      Map map = es.map;
+      List input = [];
+
+      obj.parameter.forEach((key) {
+        print("ddddddddddddddddddddddd:" + map[key]);
+        if (map.containsKey(key) && map[key] != "") {
+          input.add("'" + map[key] + "'");
+        }
+      });
+
+      if (input.length == plist.length) {
+        runfunc = "run(${input.join(",")})";
+        return true;
+      }
+    }
+    return false;
+  }
+
   checkNetwork() async {
+    if (!await checkParameter()) {
+      setState(() {
+        this.log = 'parameter error';
+      });
+      return;
+    }
+
     final PermissionHandlerPlatform _permissionHandler =
         PermissionHandlerPlatform.instance;
-    final status11 =
+    final startus =
         await _permissionHandler.checkPermissionStatus(Permission.location);
 
-    if (status11 == PermissionStatus.denied) {
+    if (startus == PermissionStatus.denied) {
       setState(() {
-        this.log = 'no network permission \n\n';
+        this.log = 'network permission denied';
       });
       return;
     }
@@ -101,7 +81,7 @@ class LoginState extends State<Login> {
 
       if (wifiName == null) {
         setState(() {
-          log = '没有连接WIFI';
+          log = 'no wifi';
         });
         return;
       } else {
@@ -109,38 +89,31 @@ class LoginState extends State<Login> {
         var wifi = targetWifi.toLowerCase();
         if (!wl.contains(wifi)) {
           setState(() {
-            log = wifiName + '不是目标WIFI，请连接到' + targetWifi;
+            log = wifiName + ' is unknown, please connect to ' + targetWifi;
           });
           return;
         }
       }
 
-      setState(() {
-        log = 'testing network...';
-      });
-//       final response = await http.get(Uri.parse(oktxt));
-      
-      setState(() {
-        log = 'end testing network...';
-      });
+      // final response = await http.get(Uri.parse(oktxt));
 
-//       if (response.statusCode == 200 && response.body.contains(okstr)) {
-//         setState(() {
-//           log = '网络可用，已经登录';
-//         });
-//         return;
-//       }
-    } on PlatformException catch (e) {
+      http.Response res = await http.get(Uri.parse(obj.page)).timeout(
+          Duration(seconds: 2),
+          onTimeout: () => http.Response('error', 408));
+
+      if (res.statusCode != 200) {
+        setState(() {
+          log = 'welcome to ' + targetWifi;
+        });
+        return;
+      }
+    } on PlatformException catch (_) {
       setState(() {
-        log = '检查网络环境失败';
+        log = 'network status check failed';
       });
       return;
     }
-    
-    setState(() {
-      log = '開始任務...';
-    });
-    
+
     headlessWebView = new HeadlessInAppWebView(
       initialUrlRequest: URLRequest(url: Uri.parse(obj.page)),
       initialOptions: InAppWebViewGroupOptions(
@@ -157,6 +130,9 @@ class LoginState extends State<Login> {
       },
       onLoadStart: (controller, url) async {
 //        print("onLoadStart $url");
+        setState(() {
+          this.log = this.log + '... \n\n';
+        });
       },
       onLoadStop: (controller, url) async {
 //        print("onLoadStop $url");
@@ -168,6 +144,26 @@ class LoginState extends State<Login> {
     );
 
     headlessWebView?.run();
+  }
+
+  injectJS() async {
+    try {
+      Javascript javascript = Javascript(obj.javascript);
+      var js = await javascript.loadFile();
+      await headlessWebView?.webViewController.evaluateJavascript(source: """
+(function(){
+  $js
+  if (typeof run === 'function') {
+    $runfunc
+  } else {
+    console.log('not found run function')
+  }
+})()
+    """);
+    } on MissingPluginException {
+      print(
+          "HeadlessInAppWebView is not running. Click on \"Run HeadlessInAppWebView\"!");
+    }
   }
 
   @override
