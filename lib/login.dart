@@ -40,8 +40,8 @@ class LoginState extends State<Login> {
       List input = [];
 
       obj.parameter.forEach((key) {
-        print("ddddddddddddddddddddddd:" + map[key]);
-        if (map.containsKey(key) && map[key] != "") {
+        final value = map[key].toString().trim();
+        if (map[key] != null && value != "") {
           input.add("'" + map[key] + "'");
         }
       });
@@ -98,7 +98,7 @@ class LoginState extends State<Login> {
       // final response = await http.get(Uri.parse(oktxt));
 
       http.Response res = await http.get(Uri.parse(obj.page)).timeout(
-          Duration(seconds: 2),
+          Duration(seconds: 3),
           onTimeout: () => http.Response('error', 408));
 
       if (res.statusCode != 200) {
@@ -161,8 +161,9 @@ class LoginState extends State<Login> {
 })()
     """);
     } on MissingPluginException {
-      print(
-          "HeadlessInAppWebView is not running. Click on \"Run HeadlessInAppWebView\"!");
+      setState(() {
+        this.log = this.log + "js is not running\n\n";
+      });
     }
   }
 
