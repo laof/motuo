@@ -95,10 +95,13 @@ class LoginState extends State<Login> {
         }
       }
 
+      setState(() {
+        log = 'network checking';
+      });
       // final response = await http.get(Uri.parse(oktxt));
 
       http.Response res = await http.get(Uri.parse(obj.page)).timeout(
-          Duration(seconds: 3),
+          Duration(seconds: 2),
           onTimeout: () => http.Response('error', 408));
 
       if (res.statusCode != 200) {
@@ -131,7 +134,7 @@ class LoginState extends State<Login> {
       onLoadStart: (controller, url) async {
 //        print("onLoadStart $url");
         setState(() {
-          this.log = this.log + '... \n\n';
+          this.log = 'loadstart \n\n';
         });
       },
       onLoadStop: (controller, url) async {
