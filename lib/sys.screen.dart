@@ -38,7 +38,11 @@ class _ChromeSafariBrowserExampleScreenState
 
   _loadfile() async {
     SettingList sl = SettingList();
-    String str = await sl.readAsString();
+    String? str = await sl.getValue();
+
+    if (str == null) {
+      return null;
+    }
 
     setState(() {
       log = str.replaceAll(server, "server");
